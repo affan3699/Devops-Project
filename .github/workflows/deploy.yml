@@ -19,6 +19,14 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
+      - name: Cache Maven dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2/repository
+          key: maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            maven-
+
       - name: Build JAR
         run: mvn clean package -DskipTests
 
@@ -31,7 +39,7 @@ jobs:
           source: "target/chatbot-0.0.1-SNAPSHOT.jar"
           target: "/opt/chatbot"
 
-      - name: Restart Spring Boot Service
+      - name: Deploy Spring Boot Service
         uses: appleboy/ssh-action@v0.1.10
         with:
           host: ${{ secrets.EC2_HOST }}

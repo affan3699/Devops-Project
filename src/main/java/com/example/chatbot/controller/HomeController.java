@@ -10,6 +10,6 @@ public class HomeController {
 
     @GetMapping("/api/message")
     public String home() {
-        return "Service running" + LocalDateTime.now();
+        return "Service running " + LocalDateTime.now();
     }
 }
