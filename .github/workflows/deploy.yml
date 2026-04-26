@@ -38,6 +38,19 @@ jobs:
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_KEY }}
           script: |
-            pkill -f 'java -jar' || true
+            set -e
+            
             cd /home/ubuntu/java-app
-            nohup java -jar *.jar > app.log 2>&1 & disown
+            
+            # STEP 1: Stop only previous app safely
+            PID=$(pgrep -f "app.jar" || true)
+            if [ ! -z "$PID" ]; then
+              kill -9 $PID || true
+            fi
+            
+            # STEP 2: Ensure correct jar name
+            JAR_NAME=$(ls *.jar | head -n 1)
+            mv $JAR_NAME app.jar
+            
+            # STEP 3: Start app safely detached
+            nohup java -jar app.jar > app.log 2>&1 < /dev/null &
