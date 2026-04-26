@@ -19,9 +19,6 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: OWASP Dependency Check
-        run: mvn org.owasp:dependency-check-maven:check
-
       - name: Cache Maven dependencies
         uses: actions/cache@v4
         with:
@@ -29,6 +26,9 @@ jobs:
           key: maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
             maven-
+            
+      - name: OWASP Dependency Check
+        run: mvn org.owasp:dependency-check-maven:check
 
       - name: Build JAR
         run: mvn clean package -DskipTests
