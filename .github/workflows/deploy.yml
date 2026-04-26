@@ -26,18 +26,18 @@ jobs:
           key: maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
             maven-
-            
+
       - name: OWASP Dependency Check
         run: mvn org.owasp:dependency-check-maven:check
-
-      - name: Build JAR
-        run: mvn clean package -DskipTests
 
       - name: Upload OWASP Report
         uses: actions/upload-artifact@v4
         with:
           name: owasp-report
           path: /home/runner/work/Devops-Project/Devops-Project/target/dependency-check-report.html
+
+      - name: Build JAR
+        run: mvn clean package -DskipTests
 
       - name: Copy JAR to EC2
         uses: appleboy/scp-action@v0.1.4
