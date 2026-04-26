@@ -40,4 +40,4 @@ jobs:
           script: |
             pkill -f 'java -jar' || true
             cd /home/ubuntu/java-app
-            nohup java -jar *.jar > app.log 2>&1 &
+            nohup java -jar *.jar > app.log 2>&1 & disown
