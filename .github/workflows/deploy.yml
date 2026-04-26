@@ -41,16 +41,15 @@ jobs:
             set -e
             
             cd /home/ubuntu/java-app
-            
-            # STEP 1: Stop only previous app safely
+
+            # only kill your app jar
             PID=$(pgrep -f "app.jar" || true)
+
             if [ ! -z "$PID" ]; then
+              kill $PID || true
+              sleep 2
               kill -9 $PID || true
             fi
-            
-            # STEP 2: Ensure correct jar name
-            JAR_NAME=$(ls *.jar | head -n 1)
-            mv $JAR_NAME app.jar
-            
-            # STEP 3: Start app safely detached
-            nohup java -jar app.jar > app.log 2>&1 < /dev/null &
+
+            # start app safely detached
+            setsid java -jar app.jar > app.log 2>&1 < /dev/null &
