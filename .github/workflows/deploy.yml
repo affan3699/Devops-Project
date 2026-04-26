@@ -39,4 +39,5 @@ jobs:
           key: ${{ secrets.EC2_KEY }}
           script: |
             cd /home/ubuntu/java-app/target
+            pkill -f java || true
             nohup java -jar *.jar > app.log 2>&1 &
