@@ -15,7 +15,7 @@ public class HomeController {
 
     @GetMapping("/api/message")
     public String home() {
-        logger.info("Service running {}", LocalDateTime.now());
+        logger.info("Service running hello {}", LocalDateTime.now());
         return "Service running " + LocalDateTime.now();
     }
 }
