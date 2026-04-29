@@ -10,6 +10,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class LLMService {
 
@@ -72,6 +74,24 @@ public class LLMService {
 
         logger.info("Response returned = {}", responseBody);
 
+        return ResponseEntity.ok(responseBody);
+    }
+
+    public ResponseEntity<ResponseModel<Object>> findAllQuestions() {
+        logger.info("findAllQuestions request received");
+
+        // fetching all questions from database
+        List<Question> questionList = questionRepository.findAll();
+
+        ResponseModel<Object> responseBody =
+                ResponseModel.approved(
+                        "APPROVED",
+                        questionList
+                );
+
+        logger.info("Response returned = {}", responseBody);
+
+        // returning response
         return ResponseEntity.ok(responseBody);
     }
 }

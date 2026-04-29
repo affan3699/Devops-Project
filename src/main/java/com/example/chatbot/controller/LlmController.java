@@ -33,4 +33,9 @@ public class LlmController {
     public ResponseEntity<ResponseModel<Object>> askQuestion2(@RequestParam String question) {
         return llmService.askQuestion2(question);
     }
+
+    @GetMapping("/questions")
+    public ResponseEntity<ResponseModel<Object>> findAllQuestions() {
+        return llmService.findAllQuestions();
+    }
 }
