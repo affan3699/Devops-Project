@@ -28,15 +28,35 @@ jobs:
             maven-
 
       - name: OWASP Dependency Check
-        run: mvn org.owasp:dependency-check-maven:check \
-          -Dformat=HTML \
-          -DoutputDirectory=target
+        run: mvn org.owasp:dependency-check-maven:check
 
       - name: Upload OWASP Report
         uses: actions/upload-artifact@v4
         with:
           name: owasp-report
           path: /home/runner/work/Devops-Project/Devops-Project/target/dependency-check-report.html
+
+      - name: Send OWASP Report Email
+        if: success()
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 465
+          secure: true
+          username: ${{ secrets.EMAIL_USERNAME }}
+          password: ${{ secrets.EMAIL_PASSWORD }}
+          subject: "🛡 OWASP Security Report - Spring Boot App"
+          to: ${{ secrets.EMAIL_TO }}
+          from: "CI/CD Pipeline"
+          body: |
+            OWASP Dependency Check completed.
+
+            Repository: ${{ github.repository }}
+            Commit: ${{ github.sha }}
+
+            Report attached.
+
+          attachments: /home/runner/work/Devops-Project/Devops-Project/target/dependency-check-report.html
 
       - name: SonarQube Analysis
         run: |
@@ -121,7 +141,3 @@ jobs:
             Repository: ${{ github.repository }}
             Commit: ${{ github.sha }}
             Branch: main
-
-            OWASP report is attached.
-
-          attachments: target/dependency-check-report.html
