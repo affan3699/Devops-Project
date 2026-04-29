@@ -119,4 +119,4 @@ jobs:
 
             OWASP report is attached.
 
-          attachments: ${{ github.workspace }}/target/dependency-check-report.html
+          attachments: target/dependency-check-report.html
