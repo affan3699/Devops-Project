@@ -119,4 +119,4 @@ jobs:
 
             OWASP report is attached.
 
-          attachments: /home/runner/work/Devops-Project/Devops-Project/target/dependency-check-report.html
+          attachments: ${{ github.workspace }}/target/dependency-check-report.html
