@@ -36,6 +36,14 @@ jobs:
           name: owasp-report
           path: /home/runner/work/Devops-Project/Devops-Project/target/dependency-check-report.html
 
+      - name: SonarQube Analysis
+        run: |
+          mvn clean verify sonar:sonar \
+            -Dsonar.projectKey=${{ secrets.SONAR_PROJECT_KEY }} \
+            -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }} \
+            -Dsonar.token=${{ secrets.SONAR_TOKEN }} \
+            -Dsonar.organization=${{ secrets.ORGANIZATION }}
+
       - name: Build JAR
         run: mvn clean package -DskipTests
 
