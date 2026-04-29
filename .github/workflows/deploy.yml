@@ -43,6 +43,8 @@ jobs:
             -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }} \
             -Dsonar.token=${{ secrets.SONAR_TOKEN }} \
             -Dsonar.organization=${{ secrets.ORGANIZATION }}
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
 
       - name: Build JAR
         run: mvn clean package -DskipTests
