@@ -58,12 +58,39 @@ jobs:
           source: "target/chatbot-0.0.1-SNAPSHOT.jar"
           target: "/opt/chatbot"
 
-      - name: Deploy Spring Boot Service
+      - name: Deploy Spring Boot Service (with rollback)
         uses: appleboy/ssh-action@v0.1.10
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_KEY }}
           script: |
+            set -e
+
+            echo "Step 1: Backup current JAR"
+            mkdir -p /opt/chatbot/backup
+
+            cp /opt/chatbot/target/chatbot-0.0.1-SNAPSHOT.jar \
+               /opt/chatbot/backup/chatbot-backup.jar || true
+
+            echo "Step 2: Restart service with new JAR"
             sudo systemctl restart chatbot
-            sudo systemctl status chatbot --no-pager
+
+            sleep 10
+
+            echo "Step 3: Health check"
+            if curl -f http://localhost:8080/actuator/health; then
+              echo "Deployment successful"
+              exit 0
+            fi
+
+            echo "❌ Deployment failed - Rolling back..."
+
+            # Step 4: Rollback
+            cp /opt/chatbot/backup/chatbot-backup.jar \
+               /opt/chatbot/target/chatbot-0.0.1-SNAPSHOT.jar
+
+            sudo systemctl restart chatbot
+
+            echo "Rollback completed"
+            exit 1
