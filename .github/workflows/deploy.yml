@@ -98,6 +98,11 @@ jobs:
             echo "Rollback completed"
             exit 1
 
+      - name: Debug OWASP file
+        run: |
+          ls -lah target/
+          file target/dependency-check-report.html
+
       - name: Send Success Email
         if: success()
         uses: dawidd6/action-send-mail@v3
