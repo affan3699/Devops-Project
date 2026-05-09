@@ -105,7 +105,7 @@
                     <ossindexAnalyzerEnabled>false</ossindexAnalyzerEnabled>
                     <failBuildOnCVSS>8</failBuildOnCVSS>
                     <autoUpdate>false</autoUpdate>
-                    <!--					<failBuildOnAnyVulnerability>true</failBuildOnAnyVulnerability>-->
+                    <!--				<failBuildOnAnyVulnerability>true</failBuildOnAnyVulnerability>-->
                 </configuration>
 
                 <executions>
